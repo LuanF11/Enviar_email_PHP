@@ -72,7 +72,7 @@ $mail = new PHPMailer(true);
 
 try {
     //Server settings
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    $mail->SMTPDebug = 2;                      //Enable verbose debug output
     $mail->isSMTP();                                            //Send using SMTP
     $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
@@ -100,7 +100,7 @@ try {
     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
     $mail->send();
-    echo 'Message has been sent';
+    echo 'Email não enviado';
 } catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    echo "Informacao do erro. Mailer Error: {$mail->ErrorInfo}";
 }
