@@ -14,6 +14,7 @@
 
 <body>
 
+	<!-- Inicio do container -->
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -41,6 +42,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- Fim do container -->
 
 </body>
 
