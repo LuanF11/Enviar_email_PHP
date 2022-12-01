@@ -11,7 +11,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 
-print_r($_POST);
+// print_r($_POST);
 
 // Classe que recebe as informações sobre o email
 class Mensagem
@@ -20,6 +20,7 @@ class Mensagem
     private $destino = null;
     private $assunto = null;
     private $mensagem = null;
+    public $status = array('id' => null, 'descricao' => '');
 
     public function __construct($destino, $assunto, $mensagem)
     {
@@ -64,6 +65,7 @@ $mensagem = new Mensagem($_POST['destino'], $_POST['assunto'], $_POST['mensagem'
 if (!$mensagem->envioValido()) {
 
     echo 'mensagem invalida';
+    header('Location:index.php');
     die();
 }
 
@@ -71,7 +73,7 @@ $mail = new PHPMailer(true);
 
 try {
     //Server settings
-    $mail->SMTPDebug = 2;                      //Enable verbose debug output
+    $mail->SMTPDebug = false;                      //Enable verbose debug output
     $mail->isSMTP();                                            //Send using SMTP
     $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
@@ -99,7 +101,67 @@ try {
     $mail->AltBody = 'Mensagem';
 
     $mail->send();
-    echo 'Email enviado';
+
+    $mensagem->status['id'] = 1;
+    $mensagem->status['descricao'] = "Email enviado";
 } catch (Exception $e) {
-    echo "Informacao do erro. Mailer Error: {$mail->ErrorInfo}";
+
+    $mensagem->status['id'] = 2;
+    $mensagem->status['descricao'] = "Informacao do erro. Mailer Error: {$mail->ErrorInfo}";
 }
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <?php if ($mensagem->status['id'] == 1) {
+                ?>
+
+                    <div class="container">
+                        <h1 class="display-2 text-sucess">Enviado</h1>
+                        <p><?php echo $mensagem->status['descricao']
+                            ?>
+                            <a href="index.php" class="btn btn-primary btn-lg">Voltar</a>
+
+                        </p>
+                    </div>
+
+                <?php } ?>
+
+                <?php if ($mensagem->status['id'] == 2) {
+                ?>
+
+                    <div class="container">
+                        <h1 class="display-2 text-danger">Não Enviado</h1>
+                        <p><?php echo $mensagem->status['descricao']
+                            ?>
+                            <a href="index.php" class="btn btn-secondary btn-lg">Voltar</a>
+
+                        </p>
+                    </div>
+
+                <?php } ?>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
