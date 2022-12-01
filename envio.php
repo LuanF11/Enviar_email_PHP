@@ -60,7 +60,6 @@ $mensagem = new Mensagem($_POST['destino'], $_POST['assunto'], $_POST['mensagem'
 // $mensagem->__set('assunto', $_POST['assunto']);
 // $mensagem->__set('mensagem', $_POST['mensagem']);
 
-// print_r($email);
 
 if (!$mensagem->envioValido()) {
 
@@ -83,7 +82,7 @@ try {
 
     //Recipients
     $mail->setFrom('tenvio45@gmail.com', 'teste envio');
-    $mail->addAddress('luan.alves06@aluno.ifce.edu.br', 'destino teste envio');     //Add a recipient
+    $mail->addAddress($mensagem->__get('destino'));     //Add a recipient
     // $mail->addAddress('ellen@example.com');               //Name is optional
     // $mail->addReplyTo('info@example.com', 'Information');
     // $mail->addCC('cc@example.com');
@@ -95,9 +94,9 @@ try {
 
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Assunto';
-    $mail->Body    = '<strong>corpo</strong>';
-    $mail->AltBody = 'corpo';
+    $mail->Subject = $mensagem->__get('assunto');
+    $mail->Body    = $mensagem->__get('mensagem');
+    $mail->AltBody = 'Mensagem';
 
     $mail->send();
     echo 'Email enviado';
